@@ -1,1 +1,47 @@
-/* Desenvolva seu estilo aqui */
+.main-header{
+    margin-top: 55px;
+}
+
+.box-header-description{
+    width: 410px;
+    height: 370px;
+    padding-top: 20px;
+}
+
+.title-1{
+    font-size: var(--font-size-1);
+    font-weight: var(--font-weight-2);
+    font-family: var(--font-family);
+    letter-spacing: 1px;
+    line-height: 150%;
+}
+
+
+.description{
+    gap: 24px;
+}
+
+
+.title-1 span{
+    color: var(--color-brand-200);
+}
+
+.text-1{
+    font-size: var(--font-size-4);
+    font-weight: var(--font-weight-4);
+    font-family: var(--font-family);
+    color: var(--color-grey-100);
+    line-height: 150%;
+}
+
+.text-2{
+    font-size: var(--font-size-4);
+    font-weight: var(--font-weight-2);
+    font-family: var(--font-family);
+    color: var(--color-grey-100);
+    line-height: 150%;
+}
+
+.figure-home-header img{
+    height: 390px;
+}
