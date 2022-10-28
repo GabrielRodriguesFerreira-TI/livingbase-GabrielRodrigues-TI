@@ -45,3 +45,39 @@
 .figure-home-header img{
     height: 390px;
 }
+
+.main-nav{
+    margin-top: 100px;
+}
+
+.ulMainList{
+    margin-top: 35px;
+}
+
+.liList{
+    gap: 16px;
+    width: 550px;
+    margin-bottom: 93px;
+}
+
+.img-post{
+    width: 100%;
+    height: 220px;
+}
+
+.box-post-description{
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.Observer{
+    max-width: 100%;
+    height: 200px;
+}
+
+.footer-Post{
+    max-width: 100%;
+    height: 255px;
+    background-color: var(--color-grey-100);
+}
+
