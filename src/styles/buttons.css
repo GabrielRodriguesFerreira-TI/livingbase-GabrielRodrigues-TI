@@ -3,6 +3,7 @@
     padding: 0px 22px;
     border-radius: 32px;
     background-color: var(--color-grey-700);
+    border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -76,4 +77,10 @@
     font-family: var(--font-family);
     top: 100px;
     left: 1350px;
+}
+
+.active{
+    background-color: var(--color-brand-100);
+    color: var(--color-grey-700);
+    z-index: 200;
 }

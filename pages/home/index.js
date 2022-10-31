@@ -1,93 +1,78 @@
 import { scrollBar } from "../../src/scripts/scrollBar.js"
 import { creatButtonsNav } from "../../src/scripts/buttonsList.js"
-import { searchPages } from "../../src/scripts/api.js"
-import { creatPostsFilter, creatPost } from "../../src/scripts/creatPost.js"
+import { getApiFilter, getApiAll } from "../../src/scripts/api.js"
+import { renderPost} from "../../src/scripts/creatPost.js"
+import { observer } from "../../src/scripts/intersection.js"
+import { filterPost, filterPostLS } from "../../src/scripts/filter.js"
+
+
 scrollBar()
 creatButtonsNav()
+
 // ------------------------------------------------
 const ulMain = document.querySelector(".ulMainList")
 const buttonsNav = document.querySelectorAll(".child-button")
-const DivObserver = document.querySelector(".Observer")
-let page = 0
 // ------------------------------------------------
-    let Local = JSON.parse(localStorage.getItem("Posts"))
-    function teste(){
-        if(Local.category == "Todos"){
+
+async function Main(){
+    buttonsNav.forEach(buttons =>{
+
+        buttons.addEventListener("click", async el =>{
+            let toggle = buttonsNav
+            toggle.forEach(element =>{
+                element.classList.remove("active")
+            })
+
             ulMain.innerHTML = ""
-            page = 0
-            ObserverPost() 
-           
-        } else{
+            el.target.classList.add("active")
 
-            for(let i = 0; i <= 2; i++){
-                ulMain.innerHTML = ""
-                page = 0
-                ObserverPostFilter()
-                
-            }
-        }
-
-            
-
-    }
-teste()
- 
-
-async function render(){
-    const arrButtons = Array.from(buttonsNav)
-    
-    arrButtons.forEach(buttons =>{
-        buttons.addEventListener("click", (e)=>{
-    
-            
-            
-            if(buttons.innerText == "Todos"){
-                ulMain.innerHTML = ""
-                page = 0
-                const objJSON = JSON.stringify(constructor("Todos"))
-                localStorage.setItem("Posts", objJSON)
-    
-                ObserverPost()
-                
-    
-            }else {
-                ulMain.innerHTML = ""
-                page = 0
-                const objJSON = JSON.stringify(constructor(e.target.innerText))
-                localStorage.setItem("Posts", objJSON)
-    
-                
-                ObserverPostFilter()
-    
-            }
+            const pagesAll = await getApiAll("https://m2-api-living.herokuapp.com/news")
+            const pagesFilter = await getApiFilter("https://m2-api-living.herokuapp.com/news")
+            filterPost(pagesFilter, pagesAll, el)
         })
     })
 }
-render()
 
+async function load(){
+    let localstorage = JSON.parse(localStorage.getItem("button"))
 
-function constructor(value){
-    const obj ={
-        category: `${value}`,
+    if(!localStorage.getItem("button") || localstorage == "Todos"){
+        buttonsNav.forEach(buttons =>{
+            if(buttons.innerText == "Todos"){
+                buttons.classList.add("active")
+            } 
+        })
+        const pagesAll = await getApiAll("https://m2-api-living.herokuapp.com/news")
+        renderPost(pagesAll[0])
+    
+        const DivObserver = document.createElement("div")
+        DivObserver.classList.add("Observer", "absolute")
+        ulMain.appendChild(DivObserver)
+    
+        observer.observe(DivObserver)
+
+    } else {
+        buttonsNav.forEach(async buttons =>{
+            if(buttons.innerText == localstorage){
+                
+                let toggle = buttonsNav
+                toggle.forEach(element =>{
+                    element.classList.remove("active")
+                })
+    
+                ulMain.innerHTML = ""
+                buttons.classList.add("active")
+    
+                const pagesFilter = await getApiFilter("https://m2-api-living.herokuapp.com/news")
+                filterPostLS(pagesFilter, buttons)
+            }
+        })
     }
-    return obj
+
 }
 
 
-function ObserverPostFilter(){
-    const observer = new IntersectionObserver(entries => {
-        if(entries.some(entry => entry.isIntersecting)){
-            creatPostsFilter(page++)
-        }
-    })
-    observer.observe(DivObserver)
-}
-
-function ObserverPost(){
-    const observer = new IntersectionObserver(entries => {
-        if(entries.some(entry => entry.isIntersecting)){
-            creatPost(page++)
-        }
-    })
-    observer.observe(DivObserver)
-}
+window.addEventListener("DOMContentLoaded", (event) =>{
+    load()
+    Main()
+})
